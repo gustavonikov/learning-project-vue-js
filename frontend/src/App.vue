@@ -6,7 +6,8 @@
 			:hideUserDropdown="!user" 
 		/>
 		<Menu v-if="user" />
-		<Content />
+		<Loading v-if="validatingToken" />
+		<Content v-else />
 		<Footer />
 	</div>
 </template>
@@ -17,6 +18,8 @@ import Content from './components/template/Content'
 import Header from './components/template/Header'
 import Menu from './components/template/Menu'
 import Footer from './components/template/Footer'
+import Loading from './components/template/Loading'
+
 import userKey from './utils/userKey'
 import api from './services/api'
 
@@ -26,13 +29,13 @@ export default {
 		Content,
 		Header,
 		Menu,
-		Footer
+		Footer,
+		Loading
 	},
 	computed: mapState(['isMenuVisible', 'user']),
 	data() {
 		return {
 			validatingToken: true,
-
 		}
 	},
 	methods: {
@@ -52,7 +55,19 @@ export default {
 			}
 
 			const response = await api.post('/validateToken', userData)
+
+			if (response.data) {
+				this.$store.commit('setUser', userData)
+			} else {
+				localStorage.removeItem(userKey)
+				this.$router.push({ name: 'auth' })
+			}
+
+			this.validatingToken = false
 		}
+	},
+	created() {
+		this.validateToken()
 	}
 };
 </script>

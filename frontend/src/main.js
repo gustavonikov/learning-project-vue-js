@@ -4,6 +4,7 @@ import App from './App.vue'
 import 'font-awesome/css/font-awesome.css'
 import './config/bootstrap'
 import './config/notifications'
+import './config/axios'
 import store from './config/store'
 import router from './routes'
 
