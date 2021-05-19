@@ -1,13 +1,13 @@
 <template>
 	<div class="article-by-id">
 		<page-title icon="fa fa-file-o" :main="article.name" :sub="article.description" />
-		<div class="article-content" v-html="article.content">
-
-		</div>
+		<div class="article-content" v-html="article.content"></div>
 	</div>
 </template>
 
 <script>
+import 'highlight.js/styles/dracula.css'
+import hljs from 'highlight.js'
 import api from '../../services/api'
 import PageTitle from '../template/PageTitle.vue'
 
@@ -23,6 +23,11 @@ export default {
 		api.get(`/articles/${this.$route.params.id}`)
 			.then(res => this.article = res.data)
 			.catch(error => console.log(error))
+	},
+	updated() {
+		document.querySelectorAll('.article-content pre').forEach(element => {
+			hljs.highlightBlock(element)
+		})
 	}
 }
 </script>

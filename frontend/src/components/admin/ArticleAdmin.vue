@@ -26,7 +26,7 @@
 				<b-form-input 
 					id="article-image" 
 					type="text" 
-					v-model="article.image"
+					v-model="article.imageUrl"
 					placeholder="Insira a imagem para o artigo"
 					:readonly="mode === 'remove'"
 					required
@@ -40,7 +40,7 @@
 				<b-form-select id="article-author" :options="users" :disabled="mode === 'remove'" v-model="article.userId">
 				</b-form-select>
 			</b-form-group>
-			<b-form-group label="Conteúdo" label-for="category=content">
+			<b-form-group label="Conteúdo" label-for="category-content">
 				<vue-editor v-show="mode === 'save'" v-model="article.content" placeholder="Informe o conteúdo do artigo..."></vue-editor>
 			</b-form-group>
 			<b-button 
@@ -119,6 +119,8 @@ export default {
 		save() {
 			const method = this.article.id ? 'put' : 'post'
 			const id = this.article.id ? `/${this.article.id}` : ''
+
+			console.log(this.article)
 
 			api[method](`/articles${id}`, this.article)
 				.then(() => {
